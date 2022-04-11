@@ -1,0 +1,1 @@
+console.log("ExpressMenu is on its way also in console...");

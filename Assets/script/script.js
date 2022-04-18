@@ -154,22 +154,22 @@ window.onload = () => {
                 console.log("Order is placed...");
                 console.log(Order_list);
                 localStorage.setItem("Orders", JSON.stringify(Order_list));
-                location.href='./Assets/pages/cart.html';
+                location.href = './Assets/pages/cart.html';
             }
         }, false)
     }
 
-    let cart_table_body=document.getElementById('cart_table_body');
-    if(cart_table_body){
-        let Order_list=JSON.parse(localStorage.getItem('Orders'));
+    let cart_table_body = document.getElementById('cart_table_body');
+    if (cart_table_body) {
+        let Order_list = JSON.parse(localStorage.getItem('Orders'));
         console.log(Order_list);
-        let html_to_be_added=``;
-
-        let Order_list_keys=Object.keys(Order_list);
-        Order_list_keys.forEach((key)=>{
-            let dish=Order_list[key];
-
-            let code=`
+        let html_to_be_added = ``;
+        let total_price = 0;
+        let Order_list_keys = Object.keys(Order_list);
+        Order_list_keys.forEach((key) => {
+            let dish = Order_list[key];
+            total_price += dish.price * dish.quantity;
+            let code = `
             <tr>
                 <td>${key}</td>
                 <td>${dish.quantity}</td>
@@ -178,10 +178,16 @@ window.onload = () => {
             </tr>
             `
 
-            html_to_be_added+=code;
+            html_to_be_added += code;
         });
-
-        cart_table_body.innerHTML+=html_to_be_added;
+        html_to_be_added+=`
+        <tr>
+            <td>Total Price</td>
+            <td></td>
+            <td></td>
+            <td>${total_price}</td>
+        </tr>`
+        cart_table_body.innerHTML += html_to_be_added;
         console.log();
 
     }

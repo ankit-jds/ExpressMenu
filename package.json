@@ -1,0 +1,41 @@
+{
+  "name": "kharcha",
+  "version": "1.0.0",
+  "description": "This is a web app to track my expenses across all mediums of payment, which can later on be viewed inside the app or can be copied/transfer into the sheets or excel.",
+  "main": "",
+  "scripts": {
+    "start": "webpack --mode=development --watch --progress",
+    "buildcss": "npx tailwindcss -i ./src/style.css -o ./public/style.css",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ankit-jds/Kharcha.git"
+  },
+  "author": "Ankit Tamboli",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ankit-jds/Kharcha/issues"
+  },
+  "homepage": "https://github.com/ankit-jds/Kharcha#readme",
+  "dependencies": {
+    "autoprefixer": "^10.4.4",
+    "firebase": "^9.6.9",
+    "firebase-admin": "^10.0.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.8",
+    "@babel/preset-env": "^7.16.11",
+    "babel-loader": "^8.2.3",
+    "css-loader": "^6.7.1",
+    "postcss": "^8.4.12",
+    "postcss-import": "^14.0.2",
+    "postcss-loader": "^6.2.1",
+    "postcss-preset-env": "^7.4.3",
+    "style-loader": "^3.3.1",
+    "tailwindcss": "^3.0.23",
+    "webpack": "^5.70.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.7.4"
+  }
+}

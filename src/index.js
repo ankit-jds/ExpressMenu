@@ -1,4 +1,46 @@
+import './style.css';
+
 console.log("ExpressMenu is on its way also in console...");
+
+// // Import the functions you need from the SDKs you need
+import {
+    getAuth,
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    signOut
+} from "firebase/auth";
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, set, onValue } from "firebase/database";
+import { getAnalytics } from "firebase/analytics";
+
+// // TODO: Add SDKs for Firebase products that you want to use
+// // https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+    apiKey: "AIzaSyB5AUrnJbRN2zirN46PYFPt6cfbwAMvnrI",
+    authDomain: "expressmenu-5dddc.firebaseapp.com",
+    databaseURL: "https://expressmenu-5dddc-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "expressmenu-5dddc",
+    storageBucket: "expressmenu-5dddc.appspot.com",
+    messagingSenderId: "928148945512",
+    appId: "1:928148945512:web:39d2d04698cba7048b99dd",
+    measurementId: "G-F5YBC5V2TQ",
+};
+
+// // Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+const auth = getAuth();
+const database = getDatabase(app);
+
+async function writeData(path, data) {
+    await set(ref(database, path), data);
+    console.log("Data is written", path, data);
+    return "Data is written...";
+}
 
 const data = {
     snacks: {
@@ -180,7 +222,7 @@ window.onload = () => {
 
             html_to_be_added += code;
         });
-        html_to_be_added+=`
+        html_to_be_added += `
         <tr>
             <td>Total Price</td>
             <td></td>
@@ -193,3 +235,4 @@ window.onload = () => {
     }
 
 }
+

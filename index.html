@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,10 +9,69 @@
 
     <link rel="stylesheet" href="./Assets/style/style.css">
 </head>
+
 <body>
 
     <h1>ExpressMenu is on its way....</h1>
-    
+    <a href="./login.html">Login</a>
+    <a href="./signup.html">Sign up</a>
+
+    <div id="site_wrapper">
+
+        <main>
+            <section id="menu_wrap">
+                <div class="accordian" id="snacks">
+                    Snacks
+                </div>
+                <div class="accordian_content" id="snacks_menu">
+                    <div>
+                        <label for="samosa">
+                            <input type="radio" name="snacks" id="samosa">
+                        </label>
+                        <label for="sandwich">
+                            <input type="radio" name="snacks" id="sandwich">
+                        </label>
+                        <label for="kachori">
+                            <input type="radio" name="snacks" id="kachori">
+                        </label>
+                        <label for="paav">
+                            <input type="radio" name="snacks" id="paav">
+                        </label>
+                    </div>
+                </div>
+                <div class="accordian" id="desserts">
+                    Desserts
+                </div>
+                <div class="accordian_content" id="desserts_menu"></div>
+                <div class="accordian" id="main_course">
+                    Main Course
+                </div>
+                <div class="accordian_content" id="mainCourse_menu"></div>
+                <div class="accordian" id="beverages">
+                    Beverages
+                </div>
+                <div class="accordian_content" id="beverages_menu"></div>
+            </section>
+
+        </main>
+
+        <!-- Cart Section -->
+        <section id="order_cart">
+            <!-- <div>
+            <p>Samosa</p>
+            <label for="quantity">
+                <input type="number" name="quantity" id="quantity" value="1">
+            </label>
+            <p>Price</p>
+        </div> -->
+        </section>
+        <div>
+            <p>Place Order</p>
+        </div>
+    </div>
+
+
+
     <script src="./Assets/script/script.js"></script>
 </body>
 

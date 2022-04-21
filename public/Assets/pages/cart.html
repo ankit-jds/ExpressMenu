@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cart</title>
 </head>
+
 <body>
     <!-- Cart Section -->
     <section>
@@ -27,15 +29,21 @@
                     </th>
                 </thead>
                 <tbody id="cart_table_body">
-                    
+
                 </tbody>
             </table>
 
         </div>
-        <div id="">Confirm the Order...</div>
+        <form action="" id="confirmed_place_order">
+            <label for="table_no">Table No.
+                <input type="number" name="table_no" id="table_no" required>
+            </label>
+            <br>
+            <input type="submit" value="Confirm the Order..."></input>
+        </form>
         <!-- Clicking here will save order details into the Firebase database. -->
     </section>
     <script src="../../main.js"></script>
 </body>
-</html>
 
+</html>

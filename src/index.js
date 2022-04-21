@@ -7,6 +7,7 @@ import {
     getAuth,
     onAuthStateChanged,
     signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
     signOut
 } from "firebase/auth";
 import { initializeApp } from "firebase/app";
@@ -40,6 +41,29 @@ async function writeData(path, data) {
     await set(ref(database, path), data);
     console.log("Data is written", path, data);
     return "Data is written...";
+}
+
+function getdatetime(date = "now") {
+    let datetime;
+    if (date === "now") {
+        datetime = new Date().toLocaleString("en-GB", {
+            timeZone: "Asia/Calcutta",
+            hour12: false,
+        });
+        // console.log(datetime, "new date");
+    } else {
+        datetime = new Date(date).toLocaleString("en-GB", {
+            timeZone: "Asia/Calcutta",
+            hour12: false,
+        });
+        // console.log(datetime, "new date");
+    }
+    datetime = datetime.split(",");
+    console.log(datetime);
+    return {
+        date: datetime[0],
+        time: datetime[1].trim(),
+    };
 }
 
 const data = {
@@ -79,6 +103,14 @@ const data = {
 let Order_list = {};
 window.onload = () => {
     console.log("window is loaded....");
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            console.log(user.uid);
+        } else {
+            console.log("user is anonymous...");
+        }
+    })
 
     let accordian_content_array = document.getElementsByClassName("accordian_content");
     if (accordian_content_array) {
@@ -233,6 +265,166 @@ window.onload = () => {
         console.log();
 
     }
+
+    let signup_form = document.getElementById("signup_form");
+    if (signup_form) {
+        console.log("Signup form is present...");
+
+        signup_form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            console.log("Form is submiting...");
+            let name = document.getElementById('name').value;
+            let email = document.getElementById('email').value;
+            let password = document.getElementById('password').value;
+
+            console.log(name, email, password);
+
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Signed in 
+                    const user = userCredential.user;
+                    console.log(user);
+
+                    location.href = "../../index.html";
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    console.error(error);
+                });
+        })
+    }
+
+    let login_form = document.getElementById("login_form");
+    if (login_form) {
+        console.log("login form is available...");
+        login_form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            console.log("Form is submiting...");
+            let email = document.getElementById('email').value;
+            let password = document.getElementById('password').value;
+
+            console.log(email, password);
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Signed in 
+                    const user = userCredential.user;
+                    console.log(user);
+
+                    location.href = "../../index.html";
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    console.log(error);
+                });
+        });
+
+
+    }
+
+    let logout = document.getElementById("logout");
+    if (logout) {
+        logout.addEventListener('click', (e) => {
+            e.preventDefault();
+            signOut(auth);
+        });
+    }
+
+    let confirmed_place_order = document.getElementById("confirmed_place_order");
+    if (confirmed_place_order) {
+        console.log("Confirmed Placing the order now....");
+        confirmed_place_order.addEventListener('submit', (e) => {
+            e.preventDefault();
+            let table_no = document.getElementById("table_no").value;
+
+            let Order = JSON.parse(localStorage.getItem('Orders'));
+            let dateTime = getdatetime("now");
+            let Order_id = `EXPM-${dateTime.date.split('/').join('')}-${dateTime.time.split(':').join('')}`
+            let path = `orders/${Order_id}`;
+            console.log(Order_id);
+            // console.log(Order);
+            Order["status"] = "pending";
+            Order["table_no"] = table_no
+            writeData(path, Order);
+
+        })
+
+    }
+
+    let orders_table_body = document.getElementById('orders_table_body');
+    if (orders_table_body) {
+        console.log("orders_table_body is available....");
+
+        /**
+         Inside Firebase Realtime Database, the data is always stored in the form of JSON, where we will use this structure:
+
+         orders:{
+             order_id:{
+                 orders_JSON,
+                 status:{pending,delivered},
+                 table_no:{}
+             }
+
+         }
+
+         where order_id will comprise of userUID and dateTime
+         EXM-datetime-userUID(last three)
+         * 
+         */
+
+
+
+        let html_to_be_added = ``;
+        const orders_database_ref = ref(database, 'orders/');
+        onValue(orders_database_ref, (snapshot) => {
+            if (!(snapshot.exists)) {
+                console.log("problem is there...");
+                return 0
+            }
+            console.log(snapshot.val());
+            let Orders_array = snapshot.val();
+            let Order_id_array = Object.keys(Orders_array);
+            console.log(Order_id_array);
+
+            let html_to_be_added = ``;
+
+            Order_id_array.forEach((Order_id) => {
+                let Order = Orders_array[Order_id];
+                if (Order.status !== "pending") {
+                    return 0;
+                }
+                console.log(Order);
+                let Order_keys = Object.keys(Order);
+                Order_keys.forEach((dishname, index) => {
+                    console.log(dishname);
+                    if (dishname === "status" || dishname === "table_no") {
+                        console.log("This "+dishname+"is banned...");
+                        return 0;
+                    }
+                    let table_no_code = ``;
+                    if (index === 0) {
+                        table_no_code = `<td rowspan="${Order_keys.length - 2}">${Order.table_no}</td>`;
+                    }
+                    let code = `
+                    <tr>
+                        ${table_no_code}
+                        <td>${dishname}</td>
+                        <td>${Order[dishname].quantity}</td>
+                    </tr>
+                    `
+                    console.log(code);
+                    html_to_be_added += code;
+                })
+
+            });
+
+            orders_table_body.innerHTML += html_to_be_added;
+        });
+
+    }
+
 
 }
 
